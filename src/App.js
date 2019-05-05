@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 import Form from "./Form";
 import "./App.css";
@@ -19,24 +19,29 @@ export default () => {
       )
     );
 
+  const onSubmit = useCallback(
+    (text) => setTodos(
+      (oldTodos) => [{text, completed: false}, ...oldTodos]
+    ),
+    []
+  );
+
   return (
     <div className="App">
-      <Form
-        onSubmit={text => setTodos([{ text, complete: false }, ...todos])}
-      />
-      <div>
+      <Form onSubmit={onSubmit} />
+      <ul>
         {todos.map(({ text, complete }, i) => (
-          <div
-            key={text}
+          <li
+            key={i}
             onClick={() => toggleComplete(i)}
             style={{
               textDecoration: complete ? "line-through" : ""
             }}
           >
             {text}
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
       <button onClick={() => setTodos([])}>reset</button>
     </div>
   );
